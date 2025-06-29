@@ -3,9 +3,8 @@ moviepy==1.0.3
 google-api-python-client==2.108.0
 google-auth-httplib2==0.1.1
 google-auth-oauthlib==1.1.0
--orpheus-tts
-+TTS==0.12.3
-+torch>=1.12.0         # required by TTS
+TTS==0.22.0
+torch==2.6.0        # required by TTS
 pydub==0.25.1
 Pillow==10.2.0
 numpy==1.22.0  # Required by Coqui TTS
