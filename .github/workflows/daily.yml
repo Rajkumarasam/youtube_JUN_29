@@ -22,11 +22,13 @@ jobs:
       - name: Install Python deps
         run: pip install -r requirements.txt
 
-      - name: Build llama.cpp
+      - name: Build llama.cpp (CMake)
         run: |
           git clone https://github.com/ggml-org/llama.cpp.git
-          cd llama.cpp && make
-        working-directory: ${{ github.workspace }}
+          cd llama.cpp
+          cmake -B build
+          cmake --build build --config Release
+
 
       - name: Generate script
         run: python3 scripts/generate_script.py
