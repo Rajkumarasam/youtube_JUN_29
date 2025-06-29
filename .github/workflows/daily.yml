@@ -1,0 +1,57 @@
+name: Daily Kids Video Pipeline
+
+on:
+  schedule:
+    # 9:30 AM IST = 04:00 UTC
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Python deps
+        run: pip install -r requirements.txt
+
+      - name: Build llama.cpp
+        run: |
+          git clone https://github.com/ggml-org/llama.cpp.git
+          cd llama.cpp && make
+        working-directory: ${{ github.workspace }}
+
+      - name: Generate script
+        run: python3 scripts/generate_script.py
+
+      - name: Generate TTS
+        run: python3 scripts/generate_tts.py
+        env:
+          ORPHEUS_MODEL: canopylabs/orpheus-tts-0.1-finetune-prod
+          ORPHEUS_VOICE: tara
+
+      - name: Generate Video Clip
+        run: python3 scripts/generate_video.py
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_MODEL: YourUser/HunyuanVideo-GGUF
+
+      - name: Assemble Final Video
+        run: python3 scripts/assemble_video.py
+        env:
+          BGM_PATH: assets/bgm.mp3
+
+      - name: Upload to YouTube
+        run: python3 scripts/upload_video.py
+        env:
+          YT_ACCESS_TOKEN: ${{ secrets.YT_ACCESS_TOKEN }}
+          VIDEO_TITLE: "ABC Rhymes for Kids – ${{ github.run_id }}"
+          VIDEO_DESCRIPTION: "Bright, fun, animated alphabet and rhymes video."
+          VIDEO_PRIVACY: public
