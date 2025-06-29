@@ -34,8 +34,7 @@ jobs:
       - name: Generate TTS
         run: python3 scripts/generate_tts.py
         env:
-          ORPHEUS_MODEL: canopylabs/orpheus-tts-0.1-finetune-prod
-          ORPHEUS_VOICE: tara
+          TTS_MODEL: tts_models/en/ljspeech/tacotron2-DDC
 
       - name: Generate Video Clip
         run: python3 scripts/generate_video.py
