@@ -1,12 +1,12 @@
-name: Daily Kids Video Pipeline
-
-on:
-  schedule:
+///name: Daily Kids Video Pipeline
+///
+///on:
+  ///schedule:
     # 9:30 AM IST = 04:00 UTC
-    - cron: '0 4 * * *'
-  workflow_dispatch:
+   // - cron: '0 4 * * *'
+ /// workflow_dispatch:
 
-jobs:
+// jobs:
   build:
     runs-on: ubuntu-latest
 
